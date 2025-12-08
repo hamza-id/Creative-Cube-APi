@@ -1,16 +1,17 @@
 ## Build results
-**/bin/
-**/obj/
-bin/
-obj/
 [Bb]in/
 [Oo]bj/
 [Dd]ebug/
 [Rr]elease/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
 *.dll
 *.exe
 *.pdb
 *.cache
+*.log
 
 ## Visual Studio
 .vs/
@@ -26,12 +27,6 @@ obj/
 .idea/
 *.sln.iml
 
-## Environment files
-appsettings.Development.json
-appsettings.Production.json
-appsettings.*.json
-!appsettings.json
-
 ## OS files
 .DS_Store
 .DS_Store?
@@ -39,13 +34,51 @@ appsettings.*.json
 Thumbs.db
 Desktop.ini
 
-## User secrets
-secrets.json
-*.pfx
-*.key
-
 ## NuGet
 *.nupkg
 *.snupkg
 project.lock.json
 project.fragment.lock.json
+artifacts/
+
+## Environment files
+appsettings.Development.json
+appsettings.Production.json
+appsettings.*.json
+!appsettings.json
+
+## User secrets and certificates
+secrets.json
+*.pfx
+*.key
+
+## ASP.NET Core
+wwwroot/lib/
+Generated/
+
+## Test results
+TestResult*/
+TestResults/
+*.trx
+*.coverage
+*.coveragexml
+
+## Profiling
+*.nvuser
+*.psess
+*.vsp
+*.vspx
+*.sap
+
+## Local history & backups
+.localhistory/
+*.bak
+*.orig
+
+## Dotnet tools
+.dotnet-*
+.config/
+
+## Other
+*.svclog
+*.tss
