@@ -1,0 +1,11 @@
+@CreativeCube.Api_HostAddress = https://localhost:7109
+
+POST {{CreativeCube.Api_HostAddress}}/auth/register
+Content-Type: application/json
+
+{
+  "email": "user@example.com",
+  "password": "Pass123!"
+}
+
+###

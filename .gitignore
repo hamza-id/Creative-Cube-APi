@@ -1,0 +1,51 @@
+## Build results
+**/bin/
+**/obj/
+bin/
+obj/
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+*.dll
+*.exe
+*.pdb
+*.cache
+
+## Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+## Visual Studio Code
+.vscode/
+
+## JetBrains Rider
+.idea/
+*.sln.iml
+
+## Environment files
+appsettings.Development.json
+appsettings.Production.json
+appsettings.*.json
+!appsettings.json
+
+## OS files
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+Desktop.ini
+
+## User secrets
+secrets.json
+*.pfx
+*.key
+
+## NuGet
+*.nupkg
+*.snupkg
+project.lock.json
+project.fragment.lock.json
