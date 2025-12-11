@@ -29,7 +29,13 @@ public class UserService
 
         var user = new AppUser
         {
-            Email = request.Email
+            FirstName = request.FirstName,
+            LastName = request.LastName,
+            Email = request.Email,
+            IqamaNumber = request.IqamaNumber,
+            Mobile = request.Mobile,
+            OrganizationName = request.OrganizationName,
+            LicenseNumber = request.LicenseNumber
         };
 
         user.PasswordHash = _passwordHasher.HashPassword(user, request.Password);

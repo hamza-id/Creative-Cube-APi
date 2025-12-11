@@ -4,22 +4,25 @@
 -what is the name of this project
 -what is project and where do i get the list of the project
 
+--------------------------------------
+Architectural, Structural, Electrical, All, MEP
+
 
 
 --------------------------------------
 1. Authentication APIs (3 APIs)
 POST /auth/register	Create a new user, store in RDS
 POST /auth/login	Login, return JWT token
-GET /auth/me	Get logged-in user profile
+GET /auth/me	    Get logged-in user profile
 
 2. Project / Blueprint Management (4 APIs)
 POST /project/upload	Upload blueprint → saved to OSS
-GET /project/list	Return all user projects from RDS
-GET /project/{id}	Fetch one project (metadata + status)
+GET /project/list	    Return all user projects from RDS
+GET /project/{id}	    Fetch one project (metadata + status)
 DELETE /project/{id}	Delete project, OSS file, DB row
 
 3. AI Processing Workflow (3 APIs)
 These are required even if EAS handles the AI model.
-POST /ai/analyze	Trigger analysis → send to EAS AI endpoint
+POST /ai/analyze	        Trigger analysis → send to EAS AI endpoint
 GET /ai/status/{projectId}	Check processing status
 GET /ai/result/{projectId}	Return processed output
