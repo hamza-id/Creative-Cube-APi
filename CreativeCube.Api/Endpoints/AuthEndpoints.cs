@@ -33,11 +33,20 @@ public static class AuthEndpoints
 
             return Results.Created($"/auth/profile", new AuthResponse(userDto, access, accessExp, refresh, refreshExp));
         })
-        .WithTags("Auth")
+               .WithTags("1. Auth")
         .WithOpenApi(op =>
         {
             op.Summary = "Register a new user";
-            op.Description = "Creates a user and returns access/refresh tokens.";
+            op.Description = "Creates a new user account and returns access/refresh tokens.\n\n" +
+                           "**Request Body Required:**\n" +
+                           "- `firstName`: User's first name (required)\n" +
+                           "- `lastName`: User's last name (required)\n" +
+                           "- `email`: User's email address (required, must be valid email)\n" +
+                           "- `password`: User's password (required, minimum 6 characters)\n" +
+                           "- `iqamaNumber`: User's Iqama number (required)\n" +
+                           "- `mobile`: User's mobile number (optional)\n" +
+                           "- `organizationName`: Organization name (optional)\n" +
+                           "- `licenseNumber`: License number (optional)";
             op.RequestBody = new OpenApiRequestBody
             {
                 Required = true,
@@ -70,11 +79,14 @@ public static class AuthEndpoints
 
             return Results.Ok(new AuthResponse(userDto, access, accessExp, refresh, refreshExp));
         })
-        .WithTags("Auth")
+               .WithTags("1. Auth")
         .WithOpenApi(op =>
         {
             op.Summary = "Login";
-            op.Description = "Validates credentials and returns access/refresh tokens.";
+            op.Description = "Authenticates user credentials and returns access/refresh tokens.\n\n" +
+                           "**Request Body Required:**\n" +
+                           "- `email`: User's email address (required)\n" +
+                           "- `password`: User's password (required)";
             op.RequestBody = new OpenApiRequestBody
             {
                 Required = true,
@@ -104,11 +116,14 @@ public static class AuthEndpoints
 
             return Results.Ok(new AuthResponse(userDto, access, accessExp, refresh, refreshExp));
         })
-        .WithTags("Auth")
+               .WithTags("1. Auth")
         .WithOpenApi(op =>
         {
             op.Summary = "Refresh access token";
-            op.Description = "Exchanges a valid refresh token for new access/refresh tokens.";
+            op.Description = "Exchanges a valid refresh token for new access/refresh tokens.\n\n" +
+                           "**Request Body Required:**\n" +
+                           "- `email`: User's email address (required)\n" +
+                           "- `refreshToken`: Valid refresh token (required)";
             op.RequestBody = new OpenApiRequestBody
             {
                 Required = true,
@@ -149,11 +164,14 @@ public static class AuthEndpoints
             return Results.Ok(userDto);
         })
         .RequireAuthorization()
-        .WithTags("Auth")
+               .WithTags("1. Auth")
         .WithOpenApi(op =>
         {
             op.Summary = "Get current user profile";
-            op.Description = "Requires Bearer token in the Authorization header.";
+            op.Description = "Returns the profile information of the authenticated user.\n\n" +
+                           "**Authentication Required:**\n" +
+                           "- Bearer token must be provided in the Authorization header\n" +
+                           "- Format: `Authorization: Bearer {accessToken}`";
             return op;
         });
 

@@ -12,6 +12,7 @@ public class AppDbContext : DbContext
     public DbSet<AppUser> Users => Set<AppUser>();
     public DbSet<Project> Projects => Set<Project>();
     public DbSet<Blueprint> Blueprints => Set<Blueprint>();
+    public DbSet<BlueprintResult> BlueprintResults => Set<BlueprintResult>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -34,6 +35,16 @@ public class AppDbContext : DbContext
             entity.HasOne(b => b.Project)
                 .WithMany(p => p.Blueprints)
                 .HasForeignKey(b => b.ProjectId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+        
+        // BlueprintResult configuration
+        modelBuilder.Entity<BlueprintResult>(entity =>
+        {
+            entity.HasIndex(br => br.BlueprintId);
+            entity.HasOne(br => br.Blueprint)
+                .WithMany()
+                .HasForeignKey(br => br.BlueprintId)
                 .OnDelete(DeleteBehavior.Cascade);
         });
         
@@ -65,7 +76,7 @@ public class AppDbContext : DbContext
     {
         var now = DateTime.UtcNow;
         var entries = ChangeTracker.Entries()
-            .Where(e => e.Entity is AppUser || e.Entity is Project || e.Entity is Blueprint);
+            .Where(e => e.Entity is AppUser || e.Entity is Project || e.Entity is Blueprint || e.Entity is BlueprintResult);
         
         foreach (var entry in entries)
         {
@@ -86,6 +97,11 @@ public class AppDbContext : DbContext
                     blueprint.CreatedAt = now;
                     blueprint.UpdatedAt = now;
                 }
+                else if (entry.Entity is BlueprintResult blueprintResult)
+                {
+                    blueprintResult.CreatedAt = now;
+                    blueprintResult.UpdatedAt = now;
+                }
             }
             else if (entry.State == EntityState.Modified)
             {
@@ -100,6 +116,10 @@ public class AppDbContext : DbContext
                 else if (entry.Entity is Blueprint blueprint)
                 {
                     blueprint.UpdatedAt = now;
+                }
+                else if (entry.Entity is BlueprintResult blueprintResult)
+                {
+                    blueprintResult.UpdatedAt = now;
                 }
             }
         }

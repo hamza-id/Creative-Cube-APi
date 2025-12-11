@@ -47,11 +47,17 @@ public static class ProjectEndpoints
             var response = ToResponse(project);
             return Results.Created($"/api/projects/{project.Id}", response);
         })
-        .WithTags("Projects")
+        .WithTags("2. Projects")
         .WithOpenApi(op =>
         {
             op.Summary = "Create a new project";
-            op.Description = "Creates a new project for the authenticated user.";
+            op.Description = "Creates a new project for the authenticated user.\n\n" +
+                           "**Request Body Required:**\n" +
+                           "- `name`: Project name/title (required)\n" +
+                           "- `serviceType`: Type of service - one of: `architectural`, `structural`, `mep` (required)\n" +
+                           "- `city`: City name where project is located (required)\n" +
+                           "- `latitude`: GPS latitude coordinate (required, decimal)\n" +
+                           "- `longitude`: GPS longitude coordinate (required, decimal)";
             op.RequestBody = new OpenApiRequestBody
             {
                 Required = true,
@@ -80,17 +86,21 @@ public static class ProjectEndpoints
             var projects = await db.Projects
                 .Where(p => p.UserId == userId)
                 .OrderByDescending(p => p.CreatedAt)
+                .Include(p => p.Blueprints)
                 .ToListAsync();
 
-            var responses = projects.Select(p => ToResponse(p)).ToList();
+            var responses = projects.Select(p => ToResponse(p, includeBlueprints: true)).ToList();
 
-            return Results.Ok(projects);
+            return Results.Ok(responses);
         })
-        .WithTags("Projects")
+        .WithTags("2. Projects")
         .WithOpenApi(op =>
         {
             op.Summary = "Get all projects";
-            op.Description = "Returns all projects for the authenticated user.";
+            op.Description = "Returns a list of all projects created by the authenticated user.\n\n" +
+                           "**Authentication Required:**\n" +
+                           "- Bearer token must be provided in the Authorization header\n" +
+                           "- Returns projects ordered by creation date (newest first)";
             return op;
         });
 
@@ -117,11 +127,16 @@ public static class ProjectEndpoints
             var response = ToResponse(project, includeBlueprints: true);
             return Results.Ok(response);
         })
-        .WithTags("Projects")
+        .WithTags("2. Projects")
         .WithOpenApi(op =>
         {
             op.Summary = "Get project by ID";
-            op.Description = "Returns a specific project with its blueprints.";
+            op.Description = "Returns a specific project by its ID, including associated blueprints.\n\n" +
+                           "**Path Parameters:**\n" +
+                           "- `id`: Project ID (required)\n\n" +
+                           "**Authentication Required:**\n" +
+                           "- Bearer token must be provided in the Authorization header\n" +
+                           "- Project must belong to the authenticated user";
             return op;
         });
 
@@ -156,11 +171,18 @@ public static class ProjectEndpoints
             var response = ToResponse(project);
             return Results.Ok(response);
         })
-        .WithTags("Projects")
+        .WithTags("2. Projects")
         .WithOpenApi(op =>
         {
             op.Summary = "Assign project to engineer";
-            op.Description = "Assigns a project to an engineer by ID.";
+            op.Description = "Assigns a project to an engineer by their user ID.\n\n" +
+                           "**Path Parameters:**\n" +
+                           "- `id`: Project ID (required)\n\n" +
+                           "**Request Body Required:**\n" +
+                           "- `assignedTo`: Engineer's user ID (Guid) to assign the project to (required)\n\n" +
+                           "**Authentication Required:**\n" +
+                           "- Bearer token must be provided in the Authorization header\n" +
+                           "- Project must belong to the authenticated user";
             op.RequestBody = new OpenApiRequestBody
             {
                 Required = true,
@@ -168,7 +190,7 @@ public static class ProjectEndpoints
                 {
                     ["application/json"] = new OpenApiMediaType
                     {
-                        Example = new OpenApiString("{\"assignedTo\": 123}")
+                        Example = new OpenApiString("{\"assignedTo\": \"a1b2c3d4-e5f6-7890-1234-567890abcdef\"}")
                     }
                 }
             };

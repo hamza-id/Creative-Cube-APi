@@ -1,5 +1,6 @@
 using System.Text;
 using CreativeCube.Api.Auth;
+using CreativeCube.Api.Config;
 using CreativeCube.Api.Data;
 using CreativeCube.Api.Endpoints;
 using CreativeCube.Api.Services;
@@ -11,7 +12,9 @@ using Microsoft.OpenApi.Models;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("Jwt"));
+builder.Services.Configure<OssOptions>(builder.Configuration.GetSection("Oss"));
 builder.Services.AddSingleton<TokenService>();
+builder.Services.AddSingleton<OssService>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
@@ -86,5 +89,6 @@ app.UseAuthorization();
 
 app.MapAuthEndpoints();
 app.MapProjectEndpoints();
+app.MapBlueprintEndpoints();
 
 app.Run();
